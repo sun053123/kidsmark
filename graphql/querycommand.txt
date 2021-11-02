@@ -1,0 +1,169 @@
+query posts{
+  getPosts {
+    id
+    body
+    createdAt
+    username
+    comments {
+      id
+      username
+      body
+    }
+  }
+}
+
+query quizzes{
+  getQuizzes {
+    id
+    body
+    createdAt
+    username
+    questions {
+      id
+      body
+      correct_answer
+      incorrect_answer
+      explanation
+    }
+    comments {
+      id
+      username
+      body
+    }
+
+  }
+}
+
+mutation comment{
+  createComment(postId:"6178db51d81a822e3b61da3b", body:"second comment on this post "){
+    id
+    body
+    comments {
+      id
+      createdAt
+      username
+      body
+    }
+  }
+  
+}
+
+{
+  getPosts{
+     id
+     body
+     comments{
+       body
+       id
+       username
+     }
+     likeCount
+     commentCount
+  }
+}
+
+mutation{
+  register(registerInput:{
+    username:"jane"
+    password:"1234"
+    confirmPassword:"1234"
+    email:"userb@email.com"
+  }){
+    id
+    email
+    token
+    username
+    createdAt
+  }
+}
+
+mutation{
+  login(username:"sun053123", password:"1234"){
+    id
+    email
+    token
+    username
+    createdAt
+  }
+}
+
+{
+  getPost(postId:"6178dc832e7b7eba4a9c02e3"){
+    id
+    body
+    createdAt
+    username
+  }
+}
+
+mutation createPost{
+  createPost(body:"A post from subcriber3"){
+    id
+    body
+    createdAt
+    username
+  }
+}
+
+mutation createQuiz{
+  createQuiz(body:"Quiz title 1"
+  description: "this is description"
+  subject: "math"
+  tags: "12"
+  categories: "quiz"
+  difficulty: "hard"){
+    id
+    body
+    createdAt
+    username
+    questions {
+      body
+      id
+    }
+  }
+
+}mutation {
+  createQuestion( quizId:"617e20a99493b1b810f3be08",body:"what animal can fly", correct_answer: "bird", incorrect_answer: "dog, cat, tiger", explanation: "cause bird has wings") {
+    id
+    body
+    username
+  }
+}
+
+
+mutation {
+  createComment(postId:"61795b82598d3acf9d5eefe6",body:"comment2"){
+    id
+  }
+}
+
+mutation deletePost{
+  deletePost(postId:"6178dc832e7b7eba4a9c02e3")
+}
+
+mutation{
+  likePost(postId:"6177ca0bbd2f7b863a28d40c"){
+    id
+    body
+    username
+    likes{
+      id
+      username
+    }
+  }
+}
+
+subscription{
+  newPost{
+    id
+    body
+    createdAt
+    username
+    comments{
+      createdAt
+    }
+    likes {
+      createdAt
+    }
+  }
+}
