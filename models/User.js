@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     createdAt: String, 
 
     role: Boolean,
-    scores: [
+    scores: 
         {
             science_score: String,
             math_score: String,
@@ -15,7 +15,20 @@ const UserSchema = new Schema({
             thai_score: String,
             social_score: String
         }
+    ,
+    histories: [
+        {
+            body:String,
+            username:String,
+            createdAt: String
+        }
     ],
+    favorites: [
+        {
+            body:String,
+            createdAt: String
+        }
+    ]
 });
 
 module.exports = model('User', UserSchema);

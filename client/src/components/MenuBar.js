@@ -23,9 +23,16 @@ function MenuBar() {
         <Menu pointing secondary size='massive' color="teal">
           <Menu.Item
             name={user.username}
-            active={activeItem === 'home'}
+            active={activeItem === 'home' || ''}
             as={Link}
             to="/"
+          />
+          <Menu.Item
+            name='quiz'
+            active={activeItem === 'quiz' }
+            onClick={handleItemClick}
+            as={Link}
+            to="/quiz"
           />
 
           <Menu.Menu position='right'>
@@ -48,6 +55,13 @@ function MenuBar() {
             onClick={handleItemClick}
             as={Link}
             to="/"
+          />
+          <Menu.Item
+            name='quiz'
+            active={activeItem === 'quiz' }
+            onClick={handleItemClick}
+            as={Link}
+            to="/quiz"
           />
           <Menu.Menu position='right'>
             <Menu.Item

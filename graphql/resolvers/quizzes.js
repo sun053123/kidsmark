@@ -43,7 +43,7 @@ module.exports = {
                 throw new Error('Subject must be not empty'); 
             }
 
-            if (tag.trim() === '') {
+            if (tags.trim() === '') {
                 throw new Error('Tag must be not empty'); 
             }
 
@@ -131,6 +131,9 @@ module.exports = {
                 return quiz;
 
             } else throw new UserInputError('quiz not found');
+        },async favQuiz(_,{ quizId }, context){
+
+            
         }
     }
 };

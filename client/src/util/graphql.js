@@ -20,3 +20,47 @@ export const FETCH_POSTS_QUERY = gql`
         }
     }
 }`
+
+export const FETCH_QUIZZES_QUERY = gql`
+    {
+        getQuizzes{
+            id
+            body
+            description
+            createdAt
+            username
+            subject
+            tags
+            categories
+            difficulty
+
+            likes{
+                username
+            }
+
+            comment{
+                id
+                username
+                createdAt
+                body
+            }
+            question{
+                id
+                body
+                username
+
+                correct_answer
+                incorrect_answer
+                explanation
+
+            }
+
+            likeCount
+            commentCount
+            questionCount
+
+
+
+        }
+    }
+`

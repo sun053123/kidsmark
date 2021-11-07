@@ -4,19 +4,20 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
 import { useForm } from '../util/hooks'
-import { FETCH_POSTS_QUERY } from '../util/graphql'
+import { FETCH_QUIZZES_QUERY } from '../util/graphql'
 
 
 function QuizForm() {                         
     const [ errors, setErrors] = useState({}); 
 
-    const { values, onChange, onSubmit } = useForm(createPostCallback, {
+    const { values, onChange, onSubmit } = useForm(createQuizCallback, {
         body: ''
+
     }); //when user already posted ,form will set to null
 
-    const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+    const [createQuiz, { error }] = useMutation(CREATE_QUIZ_MUTATION, {
         variables: values,
-        refetchQueries: [{ query: FETCH_POSTS_QUERY }],
+        refetchQueries: [{ query: FETCH_QUIZZES_QUERY }],
         onError(ApolloError) {
 			// console.log(ApolloError);
             setErrors(ApolloError.graphQLErrors[0].extensions.errors) 
@@ -27,8 +28,8 @@ function QuizForm() {
       if(errors){
           console.log(errors)}
 
-      function createPostCallback() {
-        createPost();
+      function createQuizCallback() {
+        createQuiz();
         values.body = '';
       }
 
@@ -38,7 +39,14 @@ function QuizForm() {
            <Form.Field>
            <h2>Create a Post:</h2>
                <Form.Input 
-               placeholder="Hi world" 
+               placeholder="Quiz Title" 
+               name="body" 
+               onChange={onChange} 
+               value={values.body}
+               error = {error ? true : false}/>
+
+              <Form.Input 
+               placeholder="Number of Question" 
                name="body" 
                onChange={onChange} 
                value={values.body}
@@ -57,8 +65,8 @@ function QuizForm() {
     )
 }
 
-const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!) {
+const CREATE_QUIZ_MUTATION = gql`
+  mutation createQUIZ($body: String!) {
     createPost(body: $body) {
       id
       body
@@ -82,4 +90,4 @@ const CREATE_POST_MUTATION = gql`
 `;
 
 
-export default PostForm;
+export default QuizForm;

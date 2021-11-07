@@ -12,7 +12,9 @@ import MenuBar from './components/MenuBar.js';
 import Home from './pages/Home.js';
 import Login from './pages/Login.js'
 import Register from './pages/Register.js'
-import SinglePost from './pages/SinglePost'
+import SinglePost from './pages/SinglePost.js'
+import Quiz from './pages/Quiz'
+import QuizSite from './pages/QuizSite.js'
 
 function App() {
   return (
@@ -21,9 +23,11 @@ function App() {
         <Container>
           <MenuBar />
           <Route exact path="/" component={Home}/>
+          <Route exact path="/quizzes" component={Quiz} />
           <AuthRoute exact path="/login" component={Login}/> 
           <AuthRoute exact path="/register" component={Register}/>
           <Route exact path="/posts/:postId" component={SinglePost}/>
+          <Route exact path="/quizzes/:quizId" component={QuizSite} />
         </Container>
       </Router>
     </AuthProvider>

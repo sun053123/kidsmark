@@ -15,12 +15,14 @@ module.exports = gql`
         comments: [Comment]!
         commentCount: Int!
         questions: [Question!]!
+        questionCount: Int!
 
         createdAt: String!
         username: String!
     }
     type Question{
         id: ID!
+        username: String!
         body: String!
         correct_answer: String!
         incorrect_answer: String!
@@ -55,14 +57,27 @@ module.exports = gql`
         username: String!
         createdAt: String!
         overallScore: Int!
-        scores:[Score]!
+        scores:Score!
+        favorites:[FavQuiz]
+        histories:[History]
     }
     type Score{
-        science_score: Int!
-        math_score: Int!
-        english_score: Int!
-        thai_score: Int!
-        social_score: Int!
+        science_score: String
+        math_score: String
+        english_score: String
+        thai_score: String
+        social_score: String
+    }
+    type FavQuiz{
+        id: ID!
+        createdAt: String!
+        body: String!
+    }
+    type History{
+        id: ID!
+        createdAt: String!
+        body: String!
+        username: String!
     }
     input RegisterInput{
         username: String!
@@ -84,24 +99,33 @@ module.exports = gql`
         createComment(postId: String!, body: String!): Post!
         deleteComment(postId: ID!, commentId: ID!): Post!
         likePost(postId: ID!): Post! 
-        likeQuiz(quizId: ID!): Quiz!
 
-        deleteQuiz(quizId: ID!): String!
+        likeQuiz(quizId: ID!): Quiz!
+        checkUserAnswer( quizId:ID!, subject:String!, user_answer:[String]! ):User!
+        
         createQuiz(
-            body: String!
-            description: String!
-            subject: String!
-            tags: String!
-            categories: String!
+            body: String!,
+            description: String!,
+            subject: String!,
+            tags: String!,
+            categories: String!,
             difficulty: String!): Quiz!
 
+        deleteQuiz(quizId: ID!): String!
+
         createQuestion(
-            quizId: String!
-            body: String!
-            correct_answer: String!
-            incorrect_answer: String!
-            explanation: String!
+            quizId: String!,
+            body: String!,
+            correct_answer: String!,
+            incorrect_answer: String!,
+            explanation: String!,
         ): Quiz!
+
+        deleteQuestion(
+            quizId: ID!, 
+            questionId: ID!): Quiz!
+
+        favQuiz(quizId:ID!):Quiz!
     }
     type Subscription {
         newPost: Post!

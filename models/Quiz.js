@@ -14,6 +14,7 @@ const quizSchema = new Schema({
   questions: [
       {
           body: String,
+          username: String,
           correct_answer: String,
           incorrect_answer: String,
           explanation: String
