@@ -10,17 +10,21 @@ module.exports = {
             if(body.trim() === ''){
                 throw new UserInputError('Empty Question', {
                     errors: {
-                        body: 'Comment body must not empty'
+                        body: 'Comment body must not empty.'
                     }
                 });
             }
 
             if (correct_answer.trim() === '') {
-                throw new Error('Correct answer must be not empty'); 
+                throw new Error('Correct answer must be not empty.'); 
             }
 
             if (incorrect_answer.trim() === '') {
-                throw new Error('Incorrect answer must be not empty'); 
+                throw new Error('Incorrect answer must be not empty.'); 
+            }
+
+            if (explanation.trim() === '') {
+                throw new Error('Explanation must be not empty.'); 
             }
 
             
