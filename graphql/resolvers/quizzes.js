@@ -1,20 +1,36 @@
 const Quiz = require('../../models/Quiz');
+const User = require('../../models/User');
+
 const checkAuth = require('../../util/check-auth');
 
 const { AuthenticationError, UserInputError } = require('apollo-server-errors');
+const { validateQuizInput, validateQuestionInput } = require('../../util/validators');
+
+function addCreatorHistory(user, quiz){
+
+    const userHistory = User.findById(user.id);
+
+    userHistory.histories.unshift({
+        body: quiz.id,
+        username: user.username,
+        createdAt: new Date().toISOString()
+    })
+    
+    userHistory.save();
+}
 
 module.exports = {
-    Query: { 
-        async getQuizzes(){
-            try{
+    Query: {
+        async getQuizzes() {
+            try {
                 const quizzes = await Quiz.find().sort({ createdAt: -1 }); // sort new post -> old post
                 return quizzes;
             } catch (err) {
                 throw new Error(err);
             }
         },
-        async getQuiz(_, { quizId }){
-            try{
+        async getQuiz(_, { quizId }) {
+            try {
                 const quiz = await Quiz.findById(quizId);
                 if (quiz) {
                     return quiz;
@@ -27,38 +43,17 @@ module.exports = {
         }
     },
     Mutation: {
-        async createQuiz(_, { body, description, subject, tags, categories, difficulty  }, context){
+        async createQuiz(_, { title, description, subject, tags, categories, difficulty,
+            body, choice1, choice2, choice3, correct_answer, explanation }, context) {
+
             const user = checkAuth(context);
-            console.log(user); // check log if we have user ( checkAuth is done )
 
-            if (body.trim() === '') {
-                throw new Error('Quiz must be not empty'); // Post must be atleast 1 
-            }
+            // const { errorsHeader, validHeader } = validateQuizInput(body, description, subject, tags, categories, difficulty);
 
-            if (description.trim() === '') {
-                throw new Error('Description must be not empty'); 
-            }
-
-            if (subject.trim() === '') {
-                throw new Error('Subject must be not empty'); 
-            }
-
-            if (tags.trim() === '') {
-                throw new Error('Tag must be not empty'); 
-            }
-
-            if (categories.trim() === '') {
-                throw new Error('Category must be not empty'); 
-            }
-
-            if (difficulty.trim() === '') {
-                throw new Error('Difficulty must be not empty'); 
-            }
-
-
+            // const { errors, valid } = validateQuestionInput(body, choice1, correct_answer, explanation)
 
             const newQuiz = new Quiz({ //from model Quiz.js
-                body,
+                title,
                 description,
                 subject,
                 tags,
@@ -70,55 +65,63 @@ module.exports = {
             });
 
             const quiz = await newQuiz.save();
-            return quiz;
-        },
-        createQuestion: async (_, { quizId, body, correct_answer, incorrect_answer, explanation }, context) => {
-            const { username } = checkAuth(context);
-            if(body.trim() === ''){
-                throw new UserInputError('Empty Question', {
-                    errors: {
-                        body: 'Question body must not empty'
-                    }
-                });
-            }
 
-            const quiz = await Quiz.findById(quizId);
+            console.log("create quiz")
 
-            if(quiz){
+            for (var i = 0; i < correct_answer.length; i++) {
+
+                var bodyTemp = body[i]
+                var correct_answerTemp = correct_answer[i]
+
+                var incorrect_answerTemp = []
+                incorrect_answerTemp.push(choice1[i], choice2[i], choice3[i])
+
+                var explanationTemp = explanation[i]
+
                 quiz.questions.unshift({
-                    body,
-                    correct_answer,
-                    incorrect_answer,
-                    explanation,
-                    createdAt: new Date().toISOString()
+                    body: bodyTemp,
+                    username: user.username,
+                    correct_answer: correct_answerTemp,
+                    incorrect_answer: incorrect_answerTemp,
+                    explanation: explanationTemp
                 })
-                await quiz.save();
-                return quiz;
-            } else throw new UserInputError('Quiz not found');
-        },
-    async deleteQuiz(_, { quizId }, context){
-        const user = checkAuth(context);
 
-        try{ // check user delete only their own post (allow only delete their own post)
-            const quiz = await Quiz.findById(quizId); 
-            if(user.username === quiz.username){
-                await quiz.delete();
-                return 'Post deleted successfully'
-            } else {
-                throw new AuthenticationError('Acction not allowed')
+                await quiz.save();
+                // console.log("create question", [i + 1])
+
             }
-    }catch(err){
-        throw new Error(err);    
+
+            // const userHistory = addCreatorHistory(user, quiz)
+    
+
+            return quiz;
+
+
+        },
+        async deleteQuiz(_, { quizId }, context) {
+            const user = checkAuth(context);
+
+            try { // check user delete only their own post (allow only delete their own post)
+                const quiz = await Quiz.findById(quizId);
+                if (user.username === quiz.username) {
+                    await quiz.delete();
+                    return 'Post deleted successfully'
+                } else {
+                    throw new AuthenticationError('Acction not allowed')
+                }
+            } catch (err) {
+                throw new Error(err);
             }
         },
-        async likeQuiz(_, { quizId }, context){
+        async likeQuiz(_, { quizId }, context) {
+
             const { username } = checkAuth(context);
 
             const quiz = await Quiz.findById(quizId);
-            if(quiz){
-                if(quiz.likes.find(like => like.username === username)){
+            if (quiz) {
+                if (quiz.likes.find(like => like.username === username)) {
                     //Post already like, unlike it
-                    quiz.likes = quiz.likes.filter(like => like.username !== username );
+                    quiz.likes = quiz.likes.filter(like => like.username !== username);
                 } else {
                     //Not liked, like post
                     quiz.likes.push({
@@ -131,9 +134,28 @@ module.exports = {
                 return quiz;
 
             } else throw new UserInputError('quiz not found');
-        },async favQuiz(_,{ quizId }, context){
+        },
+        async favQuiz(_, { quizId }, context) {
 
-            
+            const user = checkAuth(context);
+            const userfav = await User.findById(user.id);
+
+            if(userfav){
+                if (userfav.favorites.find(fav => fav.body === quizId)){
+                    //unfav
+                userfav.favorites = userfav.favorites.filter(fav => fav.body !== quizId);
+            } else {
+                //Not Faved, Fav post
+                userfav.favorites.unshift({
+                    body: quizId,
+                    createdAt: new Date().toISOString()
+                })
+                await userfav.save();
+            }
+                return userfav;
+            } else throw new UserInputError('Quiz not found');
+
         }
     }
+
 };

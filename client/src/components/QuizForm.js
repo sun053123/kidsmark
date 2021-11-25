@@ -6,12 +6,11 @@ import { useMutation } from '@apollo/react-hooks'
 import { useForm } from '../util/hooks'
 import { FETCH_QUIZZES_QUERY } from '../util/graphql'
 
-
 function QuizForm() {                         
     const [ errors, setErrors] = useState({}); 
 
     const { values, onChange, onSubmit } = useForm(createQuizCallback, {
-        body: ''
+        title: ''
 
     }); //when user already posted ,form will set to null
 
@@ -83,6 +82,21 @@ const CREATE_QUIZ_MUTATION = gql`
         body
         username
         createdAt
+      }
+      commentCount
+    }
+  }
+`;
+
+const SUBMIT_COMMENT_MUTATION = gql`
+  mutation($postId: String!, $body: String!) {
+    createComment(postId: $postId, body: $body) {
+      id
+      comments {
+        id
+        body
+        createdAt
+        username
       }
       commentCount
     }

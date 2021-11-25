@@ -13,8 +13,8 @@ function LikeButton({ user, quiz: {id, likeCount, likes}}){
         } else setLiked(false)
     },[user,likes] )
 
-    const [likedPost] = useMutation(LIKE_POST_MUTATION, {
-        variables: { postId: id}
+    const [likedQuiz] = useMutation(LIKE_QUIZ_MUTATION, {
+        variables: { quizId: id}
     });
 
     const likeButton = user ? (
@@ -34,7 +34,7 @@ function LikeButton({ user, quiz: {id, likeCount, likes}}){
     )
 
     return(
-        <Button as='div' labelPosition='right' onClick={ likedPost } size='mini'>
+        <Button as='div' labelPosition='right' onClick={ likedQuiz } size='mini'>
                     {likeButton}
                     <Label as='div' basic color='red' pointing='left'>
                        {likeCount}
@@ -43,9 +43,9 @@ function LikeButton({ user, quiz: {id, likeCount, likes}}){
     )
 }
 
-const LIKE_POST_MUTATION = gql`
-  mutation likePost($postId: ID!) {
-    likePost(postId: $postId) {
+const LIKE_QUIZ_MUTATION = gql`
+  mutation likeQuiz($quizId: ID!) {
+    likeQuiz(quizId: $quizId) {
       id
       likes {
         id

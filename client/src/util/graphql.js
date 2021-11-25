@@ -25,7 +25,7 @@ export const FETCH_QUIZZES_QUERY = gql`
     {
         getQuizzes{
             id
-            body
+            title
             description
             createdAt
             username
@@ -44,23 +44,19 @@ export const FETCH_QUIZZES_QUERY = gql`
                 createdAt
                 body
             }
+
             question{
                 id
                 body
                 username
-
                 correct_answer
                 incorrect_answer
                 explanation
-
             }
-
+            
             likeCount
             commentCount
             questionCount
-
-
-
         }
     }
 `

@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose');
 
 const quizSchema = new Schema({
 
-  body: String,
+  title: String,
   description: String,
   username: String,
   createdAt: String,
@@ -16,7 +16,7 @@ const quizSchema = new Schema({
           body: String,
           username: String,
           correct_answer: String,
-          incorrect_answer: String,
+          incorrect_answer: Array,
           explanation: String
   }],
 

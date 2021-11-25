@@ -1,22 +1,29 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { Grid, Transition } from 'semantic-ui-react';
+import gql from 'graphql-tag'
+
 
 import { AuthContext } from '../context/auth';
 import QuizCard from '../components/QuizCard.js';
 import QuizForm from '../components/QuizForm';
-import { FETCH_QUIZZES_QUERY } from '../util/graphql'
+// import { FETCH_QUIZZES_QUERY } from '../util/graphql'
 
 function Quiz() {
 
     const { user } = useContext( AuthContext )
 
     const { loading, error, data } = useQuery(FETCH_QUIZZES_QUERY);
-    const { getQuizzes: quizzes } = data ? data : [];
+    const { getQuizzes : quizzes } = data ? data : [];
+
+    console.log(data)
+    console.log(error) 
+    console.log(quizzes)
 
     if (loading) return <div>Loading</div>;
     if (error) return <p>ERROR</p>;
     if (!data) return <p>Not found</p>;
+
 
     // const posts = data.getPosts;
     // console.log(posts);
@@ -42,7 +49,7 @@ function Quiz() {
                     <Transition.Group>
                         {quizzes && quizzes.map(quiz => (
                         <Grid.Column key={quiz.id} style={{ marginBottom: 20 }}>
-                            <QuizCard post={quiz} />
+                            <QuizCard quiz={quiz} />
                         </Grid.Column>
                     ))}
                     </Transition.Group>
@@ -54,6 +61,31 @@ function Quiz() {
     )
 }
 
+const FETCH_QUIZZES_QUERY = gql`
+    {
+        getQuizzes{
+            id
+            title
+            description
+            createdAt
+            username
+            subject
+            tags
+            categories
+            difficulty
+
+            likes{
+                username
+            }
+            
+            likeCount
+            commentCount
+            questionCount
+           
+
+        }
+    }
+`
 
 
 export default Quiz

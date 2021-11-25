@@ -4,11 +4,16 @@ const Quiz = require('../../models/Quiz');
 const User = require('../../models/User');
 const checkAuth = require('../../util/check-auth');
 
+function returnPoint(pointCounter){
+
+}
+
 module.exports = {
     Mutation: {
         async checkUserAnswer(_, { quizId, user_answer }, context) {
 
             const user = checkAuth(context);
+            
             for (var i = 0; i < user_answer.length; i++) {
                 if (user_answer[i].trim() === '') {
                     throw new UserInputError('Empty Answer', {
@@ -36,52 +41,53 @@ module.exports = {
                 const userscore = await User.findById(user.id);
                 // console.log("history = " + userscore.histories )
 
-                if (userscore.histories.find(history => (history.body === quizId || history.body === undefined || history.body === '' || history.body === [] || history.body === null))) {
-                    throw new Error("You have done this quiz before!")
+                if (userscore.histories.find(history => (history.body === quizId || history.body === undefined || history.body === '' || history.body === [] || history.body === null)))  {
+                    // throw new Error("You have done this quiz before!")
+                    console.log(pointCounter)
+                    throw new Error('You have done this quiz before!', {
+                        errors: { body: 'You have done this quiz before!',point: pointCounter}
+                    });
                     //user done the quiz
+                }if (userscore.username == quiz.username){
+                    // throw new Error("This is your Quiz!")
+                    console.log(pointCounter)
+
+                    throw new Error('This is your Quiz!', {
+                        errors: { body: 'This is your Quiz!',point: pointCounter}
+                    });
+
+                    //user own this quiz
                 } else {
                     //user never do this quiz
                     if (quiz.subject === "science") {
                         parseInt(userscore.scores.science_score)
-                        if (userscore.scores.science_score == null || NaN || undefined) {
-                            userscore.scores.science_score = 0
-                        }
+                        // if (userscore.scores.science_score == null || NaN || undefined) {
+                        //     userscore.scores.science_score = 0
+                        // }
 
                         userscore.scores.science_score = parseInt(userscore.scores.science_score) + parseInt(pointCounter)
                         console.log("case " + quiz.subject + " , score = " + pointCounter)
                     }
                     if (quiz.subject === "math") {
                         parseInt(userscore.scores.math_score)
-                        if (userscore.scores.math_score == null || NaN || undefined) {
-                            userscore.scores.math_score = 0
-                        }
 
                         userscore.scores.math_score = parseInt(userscore.scores.math_score) + parseInt(pointCounter)
                         console.log("case " + quiz.subject + " , score = " + pointCounter)
                     }
                     if (quiz.subject === "social") {
                         parseInt(userscore.scores.social_score)
-                        if (userscore.scores.social_score == null || NaN || undefined) {
-                            userscore.scores.social_score = 0
-                        }
-
+                        
                         userscore.scores.social_score = parseInt(userscore.scores.social_score) + parseInt(pointCounter)
                         console.log("case " + quiz.subject + " , score = " + pointCounter)
                     }
                     if (quiz.subject === "thai") {
                         parseInt(userscore.scores.thai_score)
-                        if (userscore.scores.thai_score == null || NaN || undefined) {
-                            userscore.scores.thai_score = 0
-                        }
 
                         userscore.scores.thai_score = parseInt(userscore.scores.thai_score) + parseInt(pointCounter)
                         console.log("case " + quiz.subject + " , score = " + pointCounter)
                     }
                     if (quiz.subject === "english") {
                         parseInt(userscore.scores.english_score)
-                        if (userscore.scores.english_score == null || NaN || undefined) {
-                            userscore.scores.english_score = 0
-                        }
 
                         userscore.scores.english_score = parseInt(userscore.scores.english_score) + parseInt(pointCounter)
                         console.log("case " + quiz.subject + " , score = " + pointCounter)

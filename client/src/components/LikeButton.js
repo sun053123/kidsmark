@@ -34,14 +34,28 @@ function LikeButton({ user, post: {id, likeCount, likes}}){
     )
 
     return(
-        <Button as='div' labelPosition='right' onClick={ likedPost } size='mini'>
-                    {likeButton}
-                    <Label as='div' basic color='red' pointing='left'>
-                       {likeCount}
-                    </Label>
-                </Button>
+        user? (
+            <Button as='div' labelPosition='right' onClick={likedPost}>
+                {/* <CustomPopup content={liked? 'unlike post': 'like post'}> */}
+                {likeButton} 
+                <Label as='div' basic color='red' pointing='left'>
+                {likeCount}
+                </Label>
+                {/* </CustomPopup> */}
+            </Button>
+        ):(
+            <Button labelPosition='right' as='a' href='/login'>
+                {/* <CustomPopup content={liked? 'unlike post': 'like post'}> */}
+                {likeButton} 
+                <Label as='div' basic color='red' pointing='left'>
+                {likeCount}
+                </Label>
+                {/* </CustomPopup> */}
+            </Button>
+        )
     )
 }
+
 
 const LIKE_POST_MUTATION = gql`
   mutation likePost($postId: ID!) {
@@ -57,3 +71,4 @@ const LIKE_POST_MUTATION = gql`
 `;
 
 export default LikeButton;
+

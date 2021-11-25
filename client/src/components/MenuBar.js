@@ -32,7 +32,7 @@ function MenuBar() {
             active={activeItem === 'quiz' }
             onClick={handleItemClick}
             as={Link}
-            to="/quiz"
+            to="/quizzes"
           />
 
           <Menu.Menu position='right'>
@@ -61,7 +61,7 @@ function MenuBar() {
             active={activeItem === 'quiz' }
             onClick={handleItemClick}
             as={Link}
-            to="/quiz"
+            to="/quizzes"
           />
           <Menu.Menu position='right'>
             <Menu.Item

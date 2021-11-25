@@ -15,6 +15,17 @@ function generateToken(user){
     { expiresIn: '1h'});
 }
 
+function initialScore(user){
+    
+    user.scores.math_score = 0
+    user.scores.science_score = 0
+    user.scores.social_score = 0
+    user.scores.thai_score = 0
+    user.scores.english_score = 0
+
+    user.save();
+}
+
 module.exports = {
     Mutation: {
         async login(_, { username, password }){
@@ -35,7 +46,7 @@ module.exports = {
 
             if(!match){
                 errors.general = 'Wrong crendetials'
-                throw new UserInputError('Wrong credetials', { errors });
+                throw new UserInputError('Wrong credentials', { errors });
             }
             const token = generateToken(user);
 
@@ -60,7 +71,7 @@ module.exports = {
                 });
             }
         //  hash password and create an auth token
-        password = await bcrypt.hash(password, 12); //add value for better hash 
+        password = await bcrypt.hash(password, 12); //add value for better hash (add salt)
 
         const newUser = new User({
             email,
@@ -71,6 +82,9 @@ module.exports = {
 
         const res = await newUser.save();
 
+        initialScore(res)
+        
+        
         const token = generateToken(res)
 
         return {

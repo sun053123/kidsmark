@@ -2,8 +2,8 @@ const postsResolvers = require('./posts');
 const usersResolvers = require('./users');
 const commentsResolvers = require('./comments');
 const quizzesResolvers = require('./quizzes');
-const questionsResolvers = require('./questions')
 const checkAnsResolvers = require('./checkAns')
+const commentsQuizResolvers = require('./commentsQuiz')
 
 module.exports = {
     Post: {
@@ -11,9 +11,11 @@ module.exports = {
         commentCount: (parent) => parent.comments.length
     },
     User: {
-        overallScore: (parent) => parent.math_score + parent.science_score + parent.socail_score + parent.thail_score + parent.english_score
+        overallScore: (parent) => parseInt(parent.math_score) + parseInt(parent.science_score) + parseInt(parent.socail_score) + parseInt(parent.thail_score) + parseInt(parent.english_score)
     },
     Quiz: {
+        likeCount: (parent) => parent.likes.length ,
+        commentCount: (parent) => parent.comments.length,
         questionCount: (parent) => parent.questions.length
     },
     Query: {
@@ -25,8 +27,8 @@ module.exports = {
         ...postsResolvers.Mutation,
         ...commentsResolvers.Mutation,
         ...quizzesResolvers.Mutation,
-        ...questionsResolvers.Mutation,
-        ...checkAnsResolvers.Mutation
+        ...checkAnsResolvers.Mutation,
+        ...commentsQuizResolvers.Mutation
     },
     Subscription: {
         ...postsResolvers.Subscription

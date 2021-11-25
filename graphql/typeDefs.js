@@ -4,7 +4,7 @@ module.exports = gql`
 
     type Quiz{
         id: ID!
-        body: String!
+        title: String!
         description: String!
         subject: String!
         tags: String!
@@ -25,7 +25,7 @@ module.exports = gql`
         username: String!
         body: String!
         correct_answer: String!
-        incorrect_answer: String!
+        incorrect_answer: [String!]!
         explanation: String!
     }
 
@@ -104,28 +104,26 @@ module.exports = gql`
         checkUserAnswer( quizId:ID!, subject:String!, user_answer:[String]! ):User!
         
         createQuiz(
-            body: String!,
+            title: String!,
             description: String!,
             subject: String!,
             tags: String!,
             categories: String!,
-            difficulty: String!): Quiz!
+            difficulty: String!,
+
+            body: [String]!,
+            correct_answer: [String]!,
+            choice1:[String]!,
+            choice2:[String],
+            choice3:[String],
+            explanation: [String]!,): Quiz!
 
         deleteQuiz(quizId: ID!): String!
 
-        createQuestion(
-            quizId: String!,
-            body: String!,
-            correct_answer: String!,
-            incorrect_answer: String!,
-            explanation: String!,
-        ): Quiz!
+        favQuiz(quizId:ID!):User!
 
-        deleteQuestion(
-            quizId: ID!, 
-            questionId: ID!): Quiz!
-
-        favQuiz(quizId:ID!):Quiz!
+        createCommentQuiz(quizId: String!, body: String!): Quiz!
+        deleteCommentQuiz(quizId: ID!, commentId: ID!): Quiz!
     }
     type Subscription {
         newPost: Post!
