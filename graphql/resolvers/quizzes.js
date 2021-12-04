@@ -19,6 +19,11 @@ function addCreatorHistory(user, quiz){
     userHistory.save();
 }
 
+function generatePin(){
+    Math.floor(100000 + Math.random() * 900000)
+    return 
+}
+
 module.exports = {
     Query: {
         async getQuizzes() {
@@ -49,12 +54,23 @@ module.exports = {
             const user = checkAuth(context);
 
             // const { errorsHeader, validHeader } = validateQuizInput(body, description, subject, tags, categories, difficulty);
-
             // const { errors, valid } = validateQuestionInput(body, choice1, correct_answer, explanation)
+            
+            let pin = generatePin()
+            
+            while (true){ 
+
+                if (Quiz.pin.find(p => p.pin === pin)) {
+                    pin = generatePin()
+                }else{
+                    break
+                }
+            }
 
             const newQuiz = new Quiz({ //from model Quiz.js
                 title,
                 description,
+                pin : pin,
                 subject,
                 tags,
                 categories,

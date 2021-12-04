@@ -4,6 +4,7 @@ const quizSchema = new Schema({
 
   title: String,
   description: String,
+  pin: String,
   username: String,
   createdAt: String,
   subject: String,

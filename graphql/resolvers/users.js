@@ -65,11 +65,12 @@ module.exports = {
             }
         //  Make sure user doesnt already exist
             const user = await User.findOne({ username });
+
             if(user){
                 throw new UserInputError('Username is taken', {
                     errors: { username: 'This username is taken'}
                 });
-            }
+            }ß
         //  hash password and create an auth token
         password = await bcrypt.hash(password, 12); //add value for better hash (add salt)
 

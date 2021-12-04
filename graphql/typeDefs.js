@@ -106,6 +106,7 @@ module.exports = gql`
         createQuiz(
             title: String!,
             description: String!,
+            pin: String!,
             subject: String!,
             tags: String!,
             categories: String!,
