@@ -11,6 +11,9 @@ const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const { MONGODB } = require('./config.js');
 
+const socketServer = require('./socket.js');
+import ("reflect-metadata")
+
 const pubsub = new PubSub();
 
 const app = express()
@@ -51,6 +54,7 @@ async function startServer() {
     apolloServer = new ApolloServer({
         typeDefs,
         resolvers,
+        context: ({ req }) => ({ req, pubsub })
     });
     await apolloServer.start();
     apolloServer.applyMiddleware({ app });
@@ -67,7 +71,7 @@ app.listen(5000, function () {
     console.log(`gql path is ${apolloServer.graphqlPath}`);
 });
 
-const io = socketIO(httpserver)
+const io = socketServer(httpserver)
 io.on('connection', (socket) => {
     // io
 })

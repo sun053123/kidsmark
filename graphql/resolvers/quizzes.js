@@ -20,8 +20,7 @@ function addCreatorHistory(user, quiz){
 }
 
 function generatePin(){
-    Math.floor(100000 + Math.random() * 900000)
-    return 
+    return Math.floor(100000 + Math.random() * 900000)
 }
 
 module.exports = {
@@ -56,15 +55,15 @@ module.exports = {
             // const { errorsHeader, validHeader } = validateQuizInput(body, description, subject, tags, categories, difficulty);
             // const { errors, valid } = validateQuestionInput(body, choice1, correct_answer, explanation)
             
-            let pin = generatePin()
+            pin = generatePin()
+
+            // console.log(pin)
             
             while (true){ 
-
-                if (Quiz.pin.find(p => p.pin === pin)) {
+                const quizpin = await Quiz.findOne({pin});
+                if(quizpin) {
                     pin = generatePin()
-                }else{
-                    break
-                }
+                }else{break}
             }
 
             const newQuiz = new Quiz({ //from model Quiz.js
@@ -82,7 +81,7 @@ module.exports = {
 
             const quiz = await newQuiz.save();
 
-            console.log("create quiz")
+            // console.log("create quiz")
 
             for (var i = 0; i < correct_answer.length; i++) {
 
@@ -106,12 +105,9 @@ module.exports = {
                 // console.log("create question", [i + 1])
 
             }
-
+            
             // const userHistory = addCreatorHistory(user, quiz)
-    
-
             return quiz;
-
 
         },
         async deleteQuiz(_, { quizId }, context) {
