@@ -7,14 +7,14 @@ import moment from 'moment'
 import { AuthContext } from '../context/auth'
 import LikeButton from '../components/LikeButton'
 import DeleteButton from '../components/DeleteButton'
+import { useParams } from 'react-router'
 
 
 function SinglePost( props ) {
-
-    const postId = props.match.params.postId; //getId from url
-
+    // const postId = props.match.params.postId; //getId from url (react router V5)
+    const {postId: postId} = useParams() // get param from url (react router v6)
+    
     const { user } = useContext(AuthContext)
-    console.log(postId)
 
     const [ comment, setComment ] = useState('');
 
@@ -22,7 +22,7 @@ function SinglePost( props ) {
         data: { getPost } = {}
       } = useQuery(FETCH_POSTS_QUERY, {
         variables: {
-          postId
+          postId : postId
         }
       });
 

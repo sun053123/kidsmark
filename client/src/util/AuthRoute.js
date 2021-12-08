@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 import { AuthContext } from '../context/auth';
 
@@ -9,14 +9,25 @@ import { AuthContext } from '../context/auth';
 function AuthRoute({ component: Component, ...rest }) {
   const { user } = useContext(AuthContext);
 
+  console.log(Component)
+
   return (
-    <Route
+    <Outlet
       {...rest}
       render={(props) =>
-        user ? <Redirect to="/" /> : <Component {...props} />
+        user ? <Navigate to="/" /> 
+        : Navigate(<Component {...props} />)
       }
     />
   );
 }
 
 export default AuthRoute;
+
+{/* <Route
+      {...rest}
+      render={(props) =>
+        user ? <Redirect to="/" /> 
+        : <Component {...props} />
+      }
+    /> */} // react router v5

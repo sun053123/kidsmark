@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 
 import { AuthContext } from '../context/auth';
-import QuizCard from '../components/QuizCard.js';
+import QuizCard from '../components/QuizCard.jsx';
 import QuizForm from '../components/QuizForm';
 // import { FETCH_QUIZZES_QUERY } from '../util/graphql'
 

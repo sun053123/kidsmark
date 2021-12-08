@@ -22,13 +22,13 @@ function Home() {
     // console.log(posts);
     // console.log(posts)
 
-
     return (
         <Grid columns={3} divided>
+                    <p> ass </p>
+
             <Grid.Row className={"page-title"}>
                 <h1>Recent Post</h1>
             </Grid.Row>
-
 
             <Grid.Row>
                 {user && ( //if user loged in render post form
