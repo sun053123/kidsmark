@@ -4,18 +4,58 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Grid, Card, Icon, Label, Image, Button, Form, Container } from 'semantic-ui-react'
 import moment from 'moment'
 
+import { useParams } from 'react-router-dom'
+
 import { AuthContext } from '../context/auth'
 
-function ShuffledEveryAnswer(arr) {
-    for(let i=0; i<100; i++){
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
 
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
     }
-}
+  
+    return (
+        <>
+                        <Button>{array[0]}</Button>
+                        <Button>{array[1]}</Button>
+                        <Button>{array[2]}</Button>
+                        <Button>{array[3]}</Button> 
+        </>
+    )
+    
+  }
+
+//   function getShuffled(arrayCorrect,arrayIncorrect,i) {
+
+//     var array = arrayCorrect[i].push(arrayIncorrect[i])
+//     var array = shuffle(array)
+//       return (
+//           <>
+//           <Button >array[0]</Button>
+//           <Button >array[1]</Button>
+//           <Button >array[2]</Button>
+//           <Button >array[3]</Button>
+//           </>
+//       )
+//   }
+
+  
 
 
 function QuizSite( props ) {
 
-    const quizId = props.match.params.quizId; //getId from url
+    // const quizId = props.match.params.quizId; //getId from url (react route v5)
+
+    const {quizId: quizId} = useParams()
 
     const { user } = useContext(AuthContext)
     console.log(quizId)
@@ -28,7 +68,7 @@ function QuizSite( props ) {
         data: { getQuiz } = {}
     } = useQuery(FETCH_QUIZZES_QUERY, {
         variables: {
-            quizId
+            quizId: quizId
         }
     });
 
@@ -66,10 +106,13 @@ function QuizSite( props ) {
                       <Card.Header>{i+1} / {questionCount}</Card.Header>
                       <Card.Header>{title}</Card.Header>
                         <Card.Header>{question.body}</Card.Header>
-                        <Button>{question.correct_answer}</Button>
-                        <Button>{question.incorrect_answer[0]}</Button>
+                        {shuffle(question.incorrect_answer)}
+                        {/* <Button>{question.correct_answer}</Button> */}
+                        {/* <Button>{question.incorrect_answer[0]}</Button>
                         <Button>{question.incorrect_answer[1]}</Button>
                         <Button>{question.incorrect_answer[2]}</Button>
+                        <Button>{question.incorrect_answer[3]}</Button>  */}
+                        
                         <Card.Description>{question.explanation}</Card.Description>
                       </Card.Content>
                     </Card>

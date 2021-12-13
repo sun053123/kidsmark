@@ -1,14 +1,34 @@
-// const { Server } = require('socket.io')
-// const {useSocketServer} = require('socket-controllers')
+let users = []
+let questions = []
 
-// export default (httpServer) => {
-//     const io = new Server(httpServer, {
-//         cors: {
-//             oringin: "*"
-//         },
-//     });
+const generateCodeRoom = () =>{
+    let newPin = Math.floor(Math.random() * 9000, 10000)
+    return newPin;
+}
 
-//     useSocketServer(io, {controllers: + [__dirname + "/api/controllers/*.js"]})
+const addUser = ({id, name, room}) => {
+   const numberOfUsersInRoom = users.filter(user => user.room === room).length
+   if(numberOfUsersInRoom === 20)
+   return { error: 'Room full' }
 
-//     return io;
-// }
+   const newUser = { id, name, room }
+   users.push(newUser)
+   return { newUser }
+}
+
+const removeUser = id => {
+   const removeIndex = users.findIndex(user => user.id === id)
+
+   if(removeIndex!==-1)
+       return users.splice(removeIndex, 1)[0]
+}
+
+const getUser = id => {
+   return users.find(user => user.id === id)
+}
+
+const getUsersInRoom = room => {
+   return users.filter(user => user.room === room)
+}
+
+module.exports = { addUser, removeUser, getUser, getUsersInRoom }

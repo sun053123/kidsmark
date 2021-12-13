@@ -6,7 +6,6 @@ import { useMutation } from '@apollo/react-hooks'
 import { useForm } from '../util/hooks'
 import { FETCH_POSTS_QUERY } from '../util/graphql'
 
-
 function PostForm() {
     const [ errors, setErrors] = useState({}); 
 
@@ -47,7 +46,6 @@ function PostForm() {
                error = {error ? true : false}/>
                 <Button type="submit" color="primary">Submit</Button>
                </Form.Field>
-           
         </Form>
         {error && (
             <div className="ui error message" style={{marginBottom : 20}}>

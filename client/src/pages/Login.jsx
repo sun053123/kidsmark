@@ -21,7 +21,7 @@ function Login(props) {
 		update(_, {data: {login: userData}}) {
 			// console.log(result); //finish register will sent result
             context.login(userData)
-            props.history.push('/'); // finish register will sent user to home page
+            props.history.push('/') ; // finish register will sent user to home page
 		},
 		variables: values,
 		onError(ApolloError) {

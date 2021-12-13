@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Button, Icon, Label } from 'semantic-ui-react'
 
-
 function LikeButton({ user, quiz: {id, likeCount, likes}}){
     const [liked, setLiked] = useState(false)
     useEffect(() => {
@@ -34,12 +33,31 @@ function LikeButton({ user, quiz: {id, likeCount, likes}}){
     )
 
     return(
-        <Button as='div' labelPosition='right' onClick={ likedQuiz } size='mini'>
-                    {likeButton}
-                    <Label as='div' basic color='red' pointing='left'>
-                       {likeCount}
-                    </Label>
-                </Button>
+        user? (
+        <Button as='div' labelPosition='right' onClick={likedQuiz}>
+        {/* <CustomPopup content={liked? 'unlike post': 'like post'}> */}
+        {likeButton} 
+        <Label as='div' basic color='red' pointing='left'>
+        {likeCount}
+        </Label>
+        {/* </CustomPopup> */}
+    </Button>
+    ):( 
+            <Button labelPosition='right' as='a' href='/login'>
+                {/* <CustomPopup content={liked? 'unlike post': 'like post'}> */}
+                {likeButton} 
+                <Label as='div' basic color='red' pointing='left'>
+                {likeCount}
+                </Label>
+                {/* </CustomPopup> */}
+            </Button>
+        )
+        // <Button as='div' labelPosition='right' onClick={ likedQuiz } size='mini'>
+        //             {likeButton}
+        //             <Label as='div' basic color='red' pointing='left'>
+        //                {likeCount}
+        //             </Label>
+        //         </Button>
     )
 }
 

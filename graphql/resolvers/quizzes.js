@@ -37,14 +37,30 @@ module.exports = {
             try {
                 const quiz = await Quiz.findById(quizId);
                 if (quiz) {
-                    return quiz;
+                    return quiz;    
                 } else {
                     throw new Error('Quize not found');
                 }
             } catch (err) {
                 throw new Error(err);
             }
-        }
+        },
+        async getUserQuiz(_, args, context) {
+
+            const { username } = checkAuth(context);
+
+            console.log(username)
+            try {   
+                const quiz = await Quiz.find({ username:username }).sort({ createdAt: -1 })
+                if (quiz) {
+                    return quiz;    
+                } else {
+                    throw new Error('Quize not found');
+                }
+            } catch (err){
+            throw new Error(err);
+            }
+        },
     },
     Mutation: {
         async createQuiz(_, { title, description, subject, tags, categories, difficulty,
@@ -55,21 +71,21 @@ module.exports = {
             // const { errorsHeader, validHeader } = validateQuizInput(body, description, subject, tags, categories, difficulty);
             // const { errors, valid } = validateQuestionInput(body, choice1, correct_answer, explanation)
             
-            pin = generatePin()
+            // pin = generatePin()
 
-            // console.log(pin)
+            // // console.log(pin)
             
-            while (true){ 
-                const quizpin = await Quiz.findOne({pin});
-                if(quizpin) {
-                    pin = generatePin()
-                }else{break}
-            }
+            // while (true){ 
+            //     const quizpin = await Quiz.findOne({pin});
+            //     if(quizpin) {
+            //         pin = generatePin()
+            //     }else{break}
+            // }
 
             const newQuiz = new Quiz({ //from model Quiz.js
                 title,
                 description,
-                pin : pin,
+                // pin : pin,
                 subject,
                 tags,
                 categories,
@@ -89,7 +105,7 @@ module.exports = {
                 var correct_answerTemp = correct_answer[i]
 
                 var incorrect_answerTemp = []
-                incorrect_answerTemp.push(choice1[i], choice2[i], choice3[i])
+                incorrect_answerTemp.push(choice1[i], choice2[i], choice3[i], correct_answer[i])
 
                 var explanationTemp = explanation[i]
 
@@ -169,5 +185,21 @@ module.exports = {
 
         }
     }
-
 };
+
+// Query mongoose command ====================
+// Model.deleteMany()
+// Model.deleteOne()
+// Model.find()
+// Model.findById()
+// Model.findByIdAndDelete()
+// Model.findByIdAndRemove()
+// Model.findByIdAndUpdate()
+// Model.findOne()
+// Model.findOneAndDelete()
+// Model.findOneAndRemove()
+// Model.findOneAndReplace()
+// Model.findOneAndUpdate()
+// Model.replaceOne()
+// Model.updateMany()
+// Model.updateOne()

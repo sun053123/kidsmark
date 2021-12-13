@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Grid, Card, Icon, Label, Image, Button, Form } from 'semantic-ui-react'
 import moment from 'moment'
+import { Navigate } from 'react-router-dom'
 
 import { AuthContext } from '../context/auth'
 import LikeButton from '../components/LikeButton'
@@ -20,7 +21,7 @@ function SinglePost( props ) {
 
     const {
         data: { getPost } = {}
-      } = useQuery(FETCH_POSTS_QUERY, {
+      } = useQuery(FETCH_POST_QUERY, {
         variables: {
           postId : postId
         }
@@ -37,7 +38,7 @@ function SinglePost( props ) {
     })
 
     function deletePostCallback(){
-        props.history.push("/")
+        Navigate("/")
     }
 
     let postMarkup;
@@ -136,7 +137,7 @@ const SUBMIT_COMMENT_MUTATION = gql`
   }
 `;
 
-const FETCH_POSTS_QUERY = gql`
+const FETCH_POST_QUERY = gql`
     query($postId: ID!){
         getPost(postId: $postId){
             id body createdAt username likeCount
